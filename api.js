@@ -37,3 +37,38 @@ function showData(data) {
     p.textContent = firstObject.body;
 }
 
+//sportsDB
+
+
+const playerDetails = async allPlayers => {
+    const url = `https://www.thesportsdb.com/api/v1/json/2/searchloves.php?u=zag`;
+    const response = await fetch(url);
+    const data = await response.json();
+    singlePlayers(data)
+}
+
+const detailBtn = document.querySelector(".details")
+detailBtn.addEventListener("click", playerDetails)
+
+const searchPlayer = playerID => {
+    fetch(`https://www.thesportsdb.com/api/v1/json/2/lookupplayer.php?id=${playerID}`)
+        .then(response => response.json())
+        .then(data => displayPlayers(data))
+}
+
+function singlePlayers(data) {
+
+    const random = Math.floor(Math.random() * 182)
+    const playerID = data.players[random].idPlayer
+    searchPlayer(playerID)
+}
+function displayPlayers(player) {
+    const container = document.querySelector(".sportsDB-container")
+    console.log(player.players[0])
+    const playerName = player.players[0].strPlayer
+    const playerPhoto = player.players[0].strThumb
+    container.innerHTML = `
+    <h3>${playerName}<h3>
+    <img src="${playerPhoto}">
+    `
+}
